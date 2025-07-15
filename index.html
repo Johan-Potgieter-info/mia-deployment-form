@@ -205,16 +205,16 @@
   <h2>Metrics</h2>
   <div class="counter-group">
     <span class="counter-label">People Engaged</span>
-    <button class="counter" onclick="let e=document.getElementById('engaged'); e.stepDown(); return false;">–</button>
+    <button class="counter" onclick="var e=document.getElementById('engaged'); e.stepDown(); return false;">–</button>
     <input type="number" name="people_engaged" id="engaged" value="0" />
-    <button class="counter" onclick="let e=document.getElementById('engaged'); e.stepUp(); return false;">+</button>
+    <button class="counter" onclick="var e=document.getElementById('engaged'); e.stepUp(); return false;">+</button>
   </div>
 
   <div class="counter-group">
     <span class="counter-label">Bookings Captured</span>
-    <button class="counter" onclick="let b=document.getElementById('booked'); b.stepDown(); return false;">–</button>
+    <button class="counter" onclick="var b=document.getElementById('booked'); b.stepDown(); return false;">–</button>
     <input type="number" name="bookings" id="booked" value="0" />
-    <button class="counter" onclick="let b=document.getElementById('booked'); b.stepUp(); return false;">+</button>
+    <button class="counter" onclick="var b=document.getElementById('booked'); b.stepUp(); return false;">+</button>
   </div>
 
   <h2>Checklist</h2>
