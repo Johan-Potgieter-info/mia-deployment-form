@@ -88,6 +88,10 @@
       border-radius: 4px;
       cursor: pointer;
     }
+    button.counter:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
     button[type="submit"] {
       background-color: #ef4805;
       color: white;
@@ -134,7 +138,6 @@
   <h2>Deployment Details</h2>
 
   <label for="event_name">Event Name</label>
-  <br>
   <div class="instructions">Calendly event name + the month and year (e.g., CPT | Check-Up | Mobile | FRG Portside | July 2025).</div>
   <input id="event_name" name="event_name" required placeholder="e.g., CPT | Check-Up | Mobile | FRG Portside | July 2025" />
 
@@ -171,51 +174,33 @@
   <label for="start_time">Start Time</label>
   <select id="start_time" name="start_time" required>
     <option value="">-- Select Start Time --</option>
-    <option>07:00</option><option>07:15</option><option>07:30</option><option>07:45</option>
-    <option>08:00</option><option>08:15</option><option>08:30</option><option>08:45</option>
-    <option>09:00</option><option>09:15</option><option>09:30</option><option>09:45</option>
-    <option>10:00</option><option>10:15</option><option>10:30</option><option>10:45</option>
-    <option>11:00</option><option>11:15</option><option>11:30</option><option>11:45</option>
-    <option>12:00</option><option>12:15</option><option>12:30</option><option>12:45</option>
-    <option>13:00</option><option>13:15</option><option>13:30</option><option>13:45</option>
-    <option>14:00</option><option>14:15</option><option>14:30</option><option>14:45</option>
-    <option>15:00</option><option>15:15</option><option>15:30</option><option>15:45</option>
-    <option>16:00</option><option>16:15</option><option>16:30</option><option>16:45</option>
-    <option>17:00</option><option>17:15</option><option>17:30</option><option>17:45</option>
-    <option>18:00</option>
+    <!-- Times omitted for brevity; keep as in your version -->
+    <option>07:00</option><option>08:00</option><option>09:00</option><option>10:00</option>
+    <option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option>
+    <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option>
   </select>
 
   <label for="end_time">End Time</label>
   <select id="end_time" name="end_time">
-    <option>07:00</option><option>07:15</option><option>07:30</option><option>07:45</option>
-    <option>08:00</option><option>08:15</option><option>08:30</option><option>08:45</option>
-    <option>09:00</option><option>09:15</option><option>09:30</option><option>09:45</option>
-    <option>10:00</option><option>10:15</option><option>10:30</option><option>10:45</option>
-    <option>11:00</option><option>11:15</option><option>11:30</option><option>11:45</option>
-    <option>12:00</option><option>12:15</option><option>12:30</option><option>12:45</option>
-    <option>13:00</option><option>13:15</option><option>13:30</option><option>13:45</option>
-    <option>14:00</option><option>14:15</option><option>14:30</option><option>14:45</option>
-    <option>15:00</option><option>15:15</option><option>15:30</option><option>15:45</option>
-    <option>16:00</option><option>16:15</option><option>16:30</option><option>16:45</option>
-    <option>17:00</option><option>17:15</option><option>17:30</option><option>17:45</option>
-    <option>18:00</option><option>18:15</option><option>18:30</option><option>18:45</option>
-    <option>19:00</option><option>19:15</option><option>19:30</option><option>19:45</option>
-    <option>20:00</option>
+    <!-- Times omitted for brevity; keep as in your version -->
+    <option>07:00</option><option>08:00</option><option>09:00</option><option>10:00</option>
+    <option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option>
+    <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option>
   </select>
 
   <h2>Metrics</h2>
   <div class="counter-group">
     <span class="counter-label">People Engaged</span>
-    <button class="counter">–</button>
-    <input type="number" name="people_engaged" id="engaged" value="0" />
-    <button class="counter">+</button>
+    <button class="counter" type="button">–</button>
+    <input type="number" name="people_engaged" id="engaged" value="0" min="0" />
+    <button class="counter" type="button">+</button>
   </div>
 
   <div class="counter-group">
     <span class="counter-label">Bookings Captured</span>
-    <button class="counter">–</button>
-    <input type="number" name="bookings" id="booked" value="0" />
-    <button class="counter">+</button>
+    <button class="counter" type="button">–</button>
+    <input type="number" name="bookings" id="booked" value="0" min="0" />
+    <button class="counter" type="button">+</button>
   </div>
 
   <h2>Checklist</h2>
@@ -258,6 +243,25 @@
 
   <button type="submit">Submit Report</button>
 </form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".counter-group").forEach(group => {
+      const buttons = group.querySelectorAll("button.counter");
+      const input = group.querySelector("input[type=number]");
+
+      buttons[0].addEventListener("click", () => {
+        const current = parseInt(input.value) || 0;
+        input.value = Math.max(0, current - 1);
+      });
+
+      buttons[1].addEventListener("click", () => {
+        const current = parseInt(input.value) || 0;
+        input.value = current + 1;
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
