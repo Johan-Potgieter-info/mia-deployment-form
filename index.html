@@ -19,6 +19,13 @@
       padding-bottom: 5px;
       font-size: 1.4em;
     }
+    h1 {
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
     label {
       font-size: 1.1em;
       font-weight: bold;
@@ -174,7 +181,6 @@
   <label for="start_time">Start Time</label>
   <select id="start_time" name="start_time" required>
     <option value="">-- Select Start Time --</option>
-    <!-- Times omitted for brevity; keep as in your version -->
     <option>07:00</option><option>08:00</option><option>09:00</option><option>10:00</option>
     <option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option>
     <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option>
@@ -182,7 +188,6 @@
 
   <label for="end_time">End Time</label>
   <select id="end_time" name="end_time">
-    <!-- Times omitted for brevity; keep as in your version -->
     <option>07:00</option><option>08:00</option><option>09:00</option><option>10:00</option>
     <option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option>
     <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option>
@@ -247,24 +252,6 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".counter-group").forEach(group => {
-      const buttons = group.querySelectorAll("button.counter");
-      const input = group.querySelector("input[type=number]");
-
-      buttons[0].addEventListener("click", () => {
-        const current = parseInt(input.value) || 0;
-        input.value = Math.max(0, current - 1);
-      });
-
-      buttons[1].addEventListener("click", () => {
-        const current = parseInt(input.value) || 0;
-        input.value = current + 1;
-      });
-    });
-  });
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".counter-group").forEach(group => {
       const input = group.querySelector("input[type=number]");
       const decrement = group.querySelector("button.counter:first-of-type");
       const increment = group.querySelector("button.counter:last-of-type");
@@ -283,7 +270,6 @@
     });
   });
 </script>
-
 
 </body>
 </html>
