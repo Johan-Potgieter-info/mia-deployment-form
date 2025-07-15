@@ -262,6 +262,28 @@
     });
   });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".counter-group").forEach(group => {
+      const buttons = group.querySelectorAll("button.counter[type='button']");
+      const input = group.querySelector("input[type=number]");
+
+      // Decrement button
+      buttons[0].addEventListener("click", function (event) {
+        event.preventDefault();
+        const current = parseInt(input.value) || 0;
+        input.value = Math.max(0, current - 1);
+      });
+
+      // Increment button
+      buttons[1].addEventListener("click", function (event) {
+        event.preventDefault();
+        const current = parseInt(input.value) || 0;
+        input.value = current + 1;
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
