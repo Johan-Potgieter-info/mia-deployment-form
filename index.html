@@ -125,35 +125,6 @@
       }
     }
   </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('event_name').addEventListener('input', function(e) {
-        let value = e.target.value;
-        value = value
-          .replace(/\bjan\b/i, 'January')
-          .replace(/\bfeb\b/i, 'February')
-          .replace(/\bmar\b/i, 'March')
-          .replace(/\bapr\b/i, 'April')
-          .replace(/\bmay\b/i, 'May')
-          .replace(/\bjun\b/i, 'June')
-          .replace(/\bjul\b/i, 'July')
-          .replace(/\baug\b/i, 'August')
-          .replace(/\bsep\b/i, 'September')
-          .replace(/\boct\b/i, 'October')
-          .replace(/\bnov\b/i, 'November')
-          .replace(/\bdec\b/i, 'December');
-        e.target.value = value;
-      });
-
-      document.querySelectorAll('.counter').forEach(button => {
-        button.addEventListener('click', (e) => {
-          e.preventDefault();
-          const input = button.parentElement.querySelector('input');
-          button.textContent === '+' ? input.stepUp() : input.stepDown();
-        });
-      });
-    });
-  </script>
 </head>
 <body>
 
@@ -248,6 +219,8 @@
   </div>
 
   <h2>Checklist</h2>
+  <!-- Hidden input with all possible equipment values -->
+  <input type="hidden" name="all_equipment" value="Clipboards,Demo Kit,Dental Kit,Flyers,Tech">
   <div class="checkbox-group">
     <label class="checkbox">
       <input type="checkbox" name="equipment" value="Clipboards" />
