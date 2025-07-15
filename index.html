@@ -109,8 +109,19 @@
       width: 100%;
       cursor: pointer;
     }
+    button[type="submit"]:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
     button.counter, button[type="submit"] {
       touch-action: manipulation;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: -15px;
+      margin-bottom: 15px;
+      display: none;
     }
     @media (max-width: 600px) {
       body {
@@ -140,19 +151,22 @@
 <body>
 
 <h1>Mia Healthcare – Demo Deployment</h1>
-<form method="POST" action="https://script.google.com/macros/s/AKfycbwu_Yb4dJjgo2a0gqImmDu8ByXRFZHvwxUFCETI-jSWEg9DaQr4hduowCd0yEMwB7w/exec">
+<form id="deployment-form" method="POST" action="https://script.google.com/macros/s/AKfycbwu_Yb4dJjgo2a0gqImmDu8ByXRFZHvwxUFCETI-jSWEg9DaQr4hduowCd0yEMwB7w/exec">
 
   <h2>Deployment Details</h2>
 
   <label for="event_name">Event Name</label>
   <div class="instructions">Calendly event name + the month and year (e.g., CPT | Check-Up | Mobile | FRG Portside | July 2025).</div>
   <input id="event_name" name="event_name" required placeholder="e.g., CPT | Check-Up | Mobile | FRG Portside | July 2025" />
+  <div class="error" id="event_name_error">Please enter a valid event name.</div>
 
   <label for="address">Site Address</label>
   <input id="address" name="address" required />
+  <div class="error" id="address_error">Please enter a valid address.</div>
 
   <label for="contact">Site Contact</label>
   <input id="contact" name="contact" placeholder="e.g., Jane Smith – 082 123 4567" required />
+  <div class="error" id="contact_error">Please enter a valid contact.</div>
 
   <label for="lead">Team Lead</label>
   <select id="lead" name="lead" required>
@@ -161,6 +175,7 @@
     <option>Sethu Lucas (SL)</option>
     <option>Stefan Schoof (SS)</option>
   </select>
+  <div class="error" id="lead_error">Please select a team lead.</div>
 
   <label for="support">Support Member</label>
   <select id="support" name="support" required>
@@ -169,6 +184,7 @@
     <option>Sethu Lucas (SL)</option>
     <option>Stefan Schoof (SS)</option>
   </select>
+  <div class="error" id="support_error">Please select a support member.</div>
 
   <label for="officer">Wellness Officer</label>
   <select id="officer" name="officer" required>
@@ -177,6 +193,7 @@
     <option>Sethu Lucas (SL)</option>
     <option>Stefan Schoof (SS)</option>
   </select>
+  <div class="error" id="officer_error">Please select a wellness officer.</div>
 
   <label for="start_time">Start Time</label>
   <select id="start_time" name="start_time" required>
@@ -185,6 +202,7 @@
     <option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option>
     <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option>
   </select>
+  <div class="error" id="start_time_error">Please select a start time.</div>
 
   <label for="end_time">End Time</label>
   <select id="end_time" name="end_time">
@@ -192,20 +210,21 @@
     <option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option>
     <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option>
   </select>
+  <div class="error" id="end_time_error">Please select a valid end time.</div>
 
   <h2>Metrics</h2>
   <div class="counter-group">
     <span class="counter-label">People Engaged</span>
-    <button class="counter" type="button">–</button>
+    <button class="counter" type="button" aria-label="Decrease people engaged">-</button>
     <input type="number" name="people_engaged" id="engaged" value="0" min="0" />
-    <button class="counter" type="button">+</button>
+    <button class="counter" type="button" aria-label="Increase people engaged">+</button>
   </div>
 
   <div class="counter-group">
     <span class="counter-label">Bookings Captured</span>
-    <button class="counter" type="button">–</button>
+    <button class="counter" type="button" aria-label="Decrease bookings">-</button>
     <input type="number" name="bookings" id="booked" value="0" min="0" />
-    <button class="counter" type="button">+</button>
+    <button class="counter" type="button" aria-label="Increase bookings">+</button>
   </div>
 
   <h2>Checklist</h2>
@@ -246,27 +265,105 @@
   <label for="actions">Follow-up Actions</label>
   <textarea name="actions" id="actions"></textarea>
 
-  <button type="submit">Submit Report</button>
+  <button type="submit" id="submit-btn">Submit Report</button>
 </form>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // Counter handling with debouncing
+    const debounce = (func, wait) => {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    };
+
     document.querySelectorAll(".counter-group").forEach(group => {
       const input = group.querySelector("input[type=number]");
       const decrement = group.querySelector("button.counter:first-of-type");
       const increment = group.querySelector("button.counter:last-of-type");
 
-      decrement.addEventListener("click", function (event) {
-        event.preventDefault();
+      // Update button states based on input value
+      const updateButtonState = () => {
+        const value = parseInt(input.value) || 0;
+        decrement.disabled = value <= 0;
+      };
+
+      // Initialize button state
+      updateButtonState();
+
+      // Debounced increment/decrement functions
+      const handleDecrement = debounce(() => {
         const current = parseInt(input.value) || 0;
         input.value = Math.max(0, current - 1);
-      });
+        updateButtonState();
+      }, 100);
 
-      increment.addEventListener("click", function (event) {
-        event.preventDefault();
+      const handleIncrement = debounce(() => {
         const current = parseInt(input.value) || 0;
         input.value = current + 1;
+        updateButtonState();
+      }, 100);
+
+      decrement.addEventListener("click", (event) => {
+        event.preventDefault();
+        handleDecrement();
       });
+
+      increment.addEventListener("click", (event) => {
+        event.preventDefault();
+        handleIncrement();
+      });
+
+      // Prevent non-numeric input and negative values
+      input.addEventListener("input", () => {
+        if (input.value < 0 || isNaN(input.value)) {
+          input.value = 0;
+        }
+        updateButtonState();
+      });
+    });
+
+    // Form validation and submission
+    const form = document.getElementById("deployment-form");
+    const submitBtn = document.getElementById("submit-btn");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      let isValid = true;
+
+      // Reset error messages
+      document.querySelectorAll(".error").forEach(error => {
+        error.style.display = "none";
+      });
+
+      // Validate required fields
+      ["event_name", "address", "contact", "lead", "support", "officer", "start_time"].forEach(id => {
+        const input = document.getElementById(id);
+        const error = document.getElementById(`${id}_error`);
+        if (!input.value.trim()) {
+          error.style.display = "block";
+          isValid = false;
+        }
+      });
+
+      // Validate end_time if provided
+      const startTime = document.getElementById("start_time").value;
+      const endTime = document.getElementById("end_time").value;
+      if (endTime && startTime && endTime <= startTime) {
+        document.getElementById("end_time_error").style.display = "block";
+        isValid = false;
+      }
+
+      if (isValid) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+        // Simulate form submission (replace with actual submission logic)
+        setTimeout(() => {
+          form.submit(); // Submit the form to the Google Script endpoint
+        }, 500);
+      }
     });
   });
 </script>
