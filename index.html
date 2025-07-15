@@ -125,6 +125,37 @@
       }
     }
   </style>
+  <script>
+    // Normalize month names in event_name
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('event_name').addEventListener('input', function(e) {
+        let value = e.target.value;
+        value = value
+          .replace(/\bjan\b/i, 'January')
+          .replace(/\bfeb\b/i, 'February')
+          .replace(/\bmar\b/i, 'March')
+          .replace(/\bapr\b/i, 'April')
+          .replace(/\bmay\b/i, 'May')
+          .replace(/\bjun\b/i, 'June')
+          .replace(/\bjul\b/i, 'July')
+          .replace(/\baug\b/i, 'August')
+          .replace(/\bsep\b/i, 'September')
+          .replace(/\boct\b/i, 'October')
+          .replace(/\bnov\b/i, 'November')
+          .replace(/\bdec\b/i, 'December');
+        e.target.value = value;
+      });
+
+      // Handle counter buttons
+      document.querySelectorAll('.counter').forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const input = button.parentElement.querySelector('input');
+          button.textContent === '+' ? input.stepUp() : input.stepDown();
+        });
+      });
+    });
+  </script>
 </head>
 <body>
 
@@ -134,15 +165,15 @@
   <h2>Deployment Details</h2>
 
   <label for="event_name">Event Name</label>
-  <br></br>
-  <div class="instructions">Calendly event name + the month and year (e.g. CPT | Check-Up | Mobile | FRG Portside | July 2025).</div>
+  <br>
+  <div class="instructions">Calendly event name + the month and year (e.g., CPT | Check-Up | Mobile | FRG Portside | July 2025).</div>
   <input id="event_name" name="event_name" required placeholder="e.g., CPT | Check-Up | Mobile | FRG Portside | July 2025" />
 
   <label for="address">Site Address</label>
   <input id="address" name="address" required />
 
   <label for="contact">Site Contact</label>
-  <input id="contact" name="contact" placeholder="e.g. Jane Smith – 082 123 4567" required />
+  <input id="contact" name="contact" placeholder="e.g., Jane Smith – 082 123 4567" required />
 
   <label for="lead">Team Lead</label>
   <select id="lead" name="lead" required>
@@ -169,7 +200,8 @@
   </select>
 
   <label for="start_time">Start Time</label>
-  <select id="start_time" name="start_time">
+  <select id="start_time" name="start_time" required>
+    <option value="">-- Select Start Time --</option>
     <option>07:00</option><option>07:15</option><option>07:30</option><option>07:45</option>
     <option>08:00</option><option>08:15</option><option>08:30</option><option>08:45</option>
     <option>09:00</option><option>09:15</option><option>09:30</option><option>09:45</option>
@@ -205,16 +237,16 @@
   <h2>Metrics</h2>
   <div class="counter-group">
     <span class="counter-label">People Engaged</span>
-    <button class="counter" onclick="var e=document.getElementById('engaged'); e.stepDown(); return false;">–</button>
+    <button class="counter">–</button>
     <input type="number" name="people_engaged" id="engaged" value="0" />
-    <button class="counter" onclick="var e=document.getElementById('engaged'); e.stepUp(); return false;">+</button>
+    <button class="counter">+</button>
   </div>
 
   <div class="counter-group">
     <span class="counter-label">Bookings Captured</span>
-    <button class="counter" onclick="var b=document.getElementById('booked'); b.stepDown(); return false;">–</button>
+    <button class="counter">–</button>
     <input type="number" name="bookings" id="booked" value="0" />
-    <button class="counter" onclick="var b=document.getElementById('booked'); b.stepUp(); return false;">+</button>
+    <button class="counter">+</button>
   </div>
 
   <h2>Checklist</h2>
