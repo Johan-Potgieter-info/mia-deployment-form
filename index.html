@@ -32,11 +32,16 @@
       margin-bottom: 20px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      box-sizing: border-box;
     }
     textarea {
       resize: vertical;
     }
-
+    .instructions {
+      font-size: 0.9em;
+      color: #555;
+      margin: -15px 0 15px 0;
+    }
     .checkbox-group {
       display: flex;
       flex-direction: column;
@@ -44,7 +49,6 @@
       font-size: 1.1em;
       margin-bottom: 24px;
     }
-
     .checkbox {
       display: flex;
       align-items: center;
@@ -52,13 +56,11 @@
       cursor: pointer;
       line-height: 1.4;
     }
-
     .checkbox input[type="checkbox"] {
       width: 24px;
       height: 24px;
       flex-shrink: 0;
     }
-
     .counter-group {
       display: flex;
       align-items: center;
@@ -96,17 +98,45 @@
       width: 100%;
       cursor: pointer;
     }
+    button.counter, button[type="submit"] {
+      touch-action: manipulation;
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      h1, h2 {
+        font-size: 1.2em;
+      }
+      label {
+        font-size: 1em;
+      }
+      input, select, textarea {
+        font-size: 0.9em;
+        padding: 10px;
+      }
+      button.counter {
+        padding: 8px 12px;
+        font-size: 1.2em;
+      }
+      button[type="submit"] {
+        font-size: 1.1em;
+        padding: 14px;
+      }
+    }
   </style>
 </head>
 <body>
 
 <h1>Mia Healthcare – Demo Deployment</h1>
-<form method="POST" action="https://script.google.com/macros/s/AKfycbzXZo0kS14QeXBxa0jf6CqDPJGGHa4DD4ld51gU50QCfCLpW-kKk3rlNhfz-SEeqOA/exec">
+<form method="POST" action="https://script.google.com/macros/s/AKfycbxt_9a2MOupLIattepoc1MFSjTzgtzcySbdet-Axmmz4rcLI9mMo7f4O8pL2nXrET0/exec">
 
   <h2>Deployment Details</h2>
 
-  <label for="company">Company / Event Name</label>
-  <input id="company" name="company" required />
+  <label for="event_name">Event Name</label>
+  <br></br>
+  <div class="instructions">Calendly event name + the month and year (e.g. CPT | Check-Up | Mobile | FRG Portside | July 2025).</div>
+  <input id="event_name" name="event_name" required placeholder="e.g., CPT | Check-Up | Mobile | FRG Portside | July 2025" />
 
   <label for="address">Site Address</label>
   <input id="address" name="address" required />
@@ -229,4 +259,3 @@
 
 </body>
 </html>
-
